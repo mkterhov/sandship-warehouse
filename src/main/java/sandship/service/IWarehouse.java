@@ -1,10 +1,10 @@
 package sandship.service;
 
 
-import sandship.model.Material;
+import sandship.model.MaterialType;
 
 interface IWarehouse {
-    void transfer(IWarehouse to, Material material, int amount);
-    void add(Material material, int amount);
-    void removed(Material material, int amount);
+    void transfer(IWarehouse to, MaterialType material, int amount);
+    void add(MaterialType material, int amount);
+    void remove(MaterialType material, int amount);
 }

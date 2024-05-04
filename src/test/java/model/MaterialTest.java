@@ -1,54 +1,67 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import sandship.model.Material;
+import sandship.model.MaterialType;
 
-public class MaterialTest {
+class MaterialTest {
+
+    private MaterialType iron;
     private Material material;
 
     @BeforeEach
-    public void setUp() {
-        material = new Material("Wood", "Used for building stuff", "wood_icon.png", 10, 100);
+    void setUp() {
+        iron = new MaterialType("Iron", "A strong metal", "iron_icon.png", 100);
+        material = new Material(iron, 50);
     }
 
     @Test
-    public void testSetQuantityWithinBounds() {
-        try {
-            material.setQuantity(50);
-        } catch (Exception e) {
-            fail("Setting quantity within bounds should not throw an exception");
-        }
-        assertEquals(50, material.getQuantity(), "Quantity should be updated to 50");
+    void testConstructorValid() {
+        assertEquals(iron, material.getType());
+        assertEquals(50, material.getQuantity());
     }
 
     @Test
-    public void testSetQuantityExceedsMaxAmount() {
-        Exception exception = assertThrows(Exception.class, () -> {
-            material.setQuantity(150);
-        });
-
-        assertEquals("quantity bigger than max", exception.getMessage(), "Exception message should match expected text");
+    void testConstructorInvalidNegativeQuantity() {
+        assertThrows(IllegalArgumentException.class, () -> new Material(iron, -1));
     }
 
     @Test
-    public void testGetQuantityInitialValue() {
-        assertEquals(10, material.getQuantity(), "Initial quantity should be 10");
+    void testConstructorInvalidOverCapacity() {
+        assertThrows(IllegalArgumentException.class, () -> new Material(iron, 101));
     }
 
     @Test
-    public void testGetName() {
-        assertEquals("Wood", material.getName(), "Name should be 'Wood'");
+    void testAddQuantityValid() {
+        material.addQuantity(20);
+        assertEquals(70, material.getQuantity());
     }
 
     @Test
-    public void testGetDescription() {
-        assertEquals("Used for building stuff", material.getDescription(), "Description should match the provided text");
+    void testAddQuantityInvalidNegative() {
+        assertThrows(IllegalArgumentException.class, () -> material.addQuantity(-10));
     }
 
     @Test
-    public void testGetIcon() {
-        assertEquals("wood_icon.png", material.getIcon(), "Icon should match the provided filename");
+    void testAddQuantityInvalidOverCapacity() {
+        assertThrows(IllegalArgumentException.class, () -> material.addQuantity(51));
+    }
+
+    @Test
+    void testRemoveQuantityValid() {
+        material.removeQuantity(20);
+        assertEquals(30, material.getQuantity());
+    }
+
+    @Test
+    void testRemoveQuantityInvalidNegative() {
+        assertThrows(IllegalArgumentException.class, () -> material.removeQuantity(-10));
+    }
+
+    @Test
+    void testRemoveQuantityInvalidOverdraw() {
+        assertThrows(IllegalArgumentException.class, () -> material.removeQuantity(60));
     }
 }
