@@ -1,47 +1,60 @@
 package sandship.model;
 
 public class Material {
-    private final MaterialType type;
+    private final String name;
+    private final String description;
+    private final String icon;
+    private final int maxCapacity;
     private int quantity;
 
-    public Material(MaterialType type, int quantity) throws IllegalArgumentException{
-        this.type = type;
-        if (quantity < 0 || quantity > type.getMaxCapacity()) {
-            throw new IllegalArgumentException("Quantity must be between 0 and the max capacity.");
-        }
-        this.quantity = quantity;
+    public Material(String name, String description, String icon, int maxCapacity) {
+        this.name = name;
+        this.description = description;
+        this.icon = icon;
+        this.quantity = 0;
+        this.maxCapacity = maxCapacity;
     }
 
-    public MaterialType getType() {
-        return type;
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-
-    public void addQuantity(int quantityToAdd) throws IllegalArgumentException{
-        if (quantityToAdd < 0) {
-            throw new IllegalArgumentException("Quantity to add cannot be negative.");
-        }
-
-        if (this.quantity + quantityToAdd > type.getMaxCapacity()) {
-            throw new IllegalArgumentException("Exceeds max capacity for this material.");
-        }
-
-        this.quantity += quantityToAdd;
+    public int getMaxCapacity() {
+        return maxCapacity;
     }
 
-    public void removeQuantity(int quantityToRemove) throws IllegalArgumentException{
-        if (quantityToRemove < 0) {
-            throw new IllegalArgumentException("Quantity to remove cannot be negative.");
+    public boolean addQuantity(int amount) {
+        if (this.quantity + amount <= maxCapacity) {
+            this.quantity += amount;
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        if (this.quantity - quantityToRemove < 0) {
-            throw new IllegalArgumentException("Cannot remove more than the current quantity.");
+    public boolean removeQuantity(int amount) {
+        if (this.quantity - amount >= 0) {
+            this.quantity -= amount;
+            return true;
+        } else {
+            return false;
         }
-
-        this.quantity -= quantityToRemove;
     }
 }
