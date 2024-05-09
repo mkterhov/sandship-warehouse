@@ -5,7 +5,7 @@ import sandship.model.Material;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Warehouse {
+public class Warehouse implements IWarehouse {
     private final String id;
     private Map<String, Material> materials = new HashMap<>();
 
@@ -13,7 +13,8 @@ public class Warehouse {
         this.id = id;
     }
 
-    public void addMaterial(Material material) throws AddMaterialException {
+    @Override
+    public void store(Material material) throws AddMaterialException {
         if (!validateMaterialAddition(material)) {
             throw new AddMaterialException("Failed to add material " + material.getName() + ". Exceeds max capacity.");
         }
@@ -29,11 +30,13 @@ public class Warehouse {
         materials.put(material.getName(), material);
     }
 
-    public void removeMaterial(String name) {
+    @Override
+    public void removeByName(String name) {
         materials.remove(name);
     }
 
-    public void transferMaterial(String name, int quantity, Warehouse toWarehouse) throws TransferException {
+    @Override
+    public void transfer(String name, int quantity, IWarehouse toWarehouse) throws TransferException {
         if (!materials.containsKey(name)) {
             throw new TransferException("Failed to transfer " + quantity + " of " + name + " from " + id + " to " + toWarehouse.getId());
         }
@@ -47,20 +50,21 @@ public class Warehouse {
         );
 
         transferredMaterial.setQuantity(quantity);
+
         try
         {
-            toWarehouse.addMaterial(transferredMaterial);
-
+            toWarehouse.store(transferredMaterial);
         } catch (AddMaterialException e){
             throw new TransferException("Failed to transfer " + quantity + " of " + name + " from " + id + " to " + toWarehouse.getId());
         }
 
         material.removeQuantity(quantity);
         if (material.getQuantity() == 0) {
-            removeMaterial(material.getName());
+            removeByName(material.getName());
         }
     }
 
+    @Override
     public int getAvailableCapacity(Material material) {
         int currentQuantity = materials.getOrDefault(
                 material.getName(),
@@ -69,6 +73,7 @@ public class Warehouse {
                         "",
                         material.getMaxCapacity())
         ).getQuantity();
+
         return material.getMaxCapacity() - currentQuantity;
     }
 
@@ -80,19 +85,23 @@ public class Warehouse {
         return true;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public Map<String, Material> getMaterials() {
         return materials;
     }
 
+    @Override
     public void setMaterials(Map<String, Material> materials) {
         this.materials = materials;
     }
 
-    public void outputMaterials() {
+    @Override
+    public void printMaterials() {
         System.out.println("Warehouse ID: " + id);
         for (Material material : materials.values()) {
             System.out.println("Material: " + material.getName() + ", Quantity: " + material.getQuantity() + ", Max Capacity: " + material.getMaxCapacity());
