@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Warehouse implements IWarehouse, WarehouseSubject {
     private final String id;
-    private Map<String, Material> materials = new HashMap<>();
+    private final Map<String, Material> materials = new HashMap<>();
     private final List<WarehouseObserver> observers = new ArrayList<>();
 
     public Warehouse(String id) {
