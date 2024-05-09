@@ -38,7 +38,7 @@ public class Warehouse implements IWarehouse {
     @Override
     public void transfer(String name, int quantity, IWarehouse toWarehouse) throws TransferException {
         if (!materials.containsKey(name)) {
-            throw new TransferException("Failed to transfer " + quantity + " of " + name + " from " + id + " to " + toWarehouse.getId());
+            throw new TransferException("The requested material not found in " + id  + "!");
         }
 
         Material material = materials.get(name);
@@ -66,15 +66,12 @@ public class Warehouse implements IWarehouse {
 
     @Override
     public int getAvailableCapacity(Material material) {
-        int currentQuantity = materials.getOrDefault(
-                material.getName(),
-                new Material(material.getName(),
-                        "",
-                        "",
-                        material.getMaxCapacity())
-        ).getQuantity();
+        if (materials.containsKey(material.getName())) {
+            Material existingMaterial = materials.get(material.getName());
+            return material.getMaxCapacity() - existingMaterial.getQuantity();
+        }
 
-        return material.getMaxCapacity() - currentQuantity;
+        return material.getMaxCapacity();
     }
 
     private boolean validateMaterialAddition(Material material) {

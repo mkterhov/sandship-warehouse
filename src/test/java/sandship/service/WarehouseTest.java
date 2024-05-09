@@ -93,8 +93,6 @@ public class WarehouseTest {
         Material materialInWarehouse2 = new Material("Copper", "A conductive metal", "copper_icon.png", 100);
         materialInWarehouse2.setQuantity(90);
         warehouse2.store(materialInWarehouse2);
-        warehouse1.printMaterials();
-        warehouse2.printMaterials();
 
         TransferException exception = assertThrows(TransferException.class, () -> {
             warehouse1.transfer("Copper", 20, warehouse2);
@@ -105,6 +103,7 @@ public class WarehouseTest {
                 exception.getMessage()
         );
     }
+
     @Test
     public void testGetId() {
         assertEquals("W1", warehouse1.getId());
