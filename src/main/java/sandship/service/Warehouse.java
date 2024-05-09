@@ -1,13 +1,19 @@
 package sandship.service;
 
 import sandship.model.Material;
+import sandship.observer.OperationType;
+import sandship.observer.WarehouseObserver;
+import sandship.observer.WarehouseSubject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Warehouse implements IWarehouse {
+public class Warehouse implements IWarehouse, WarehouseSubject {
     private final String id;
     private Map<String, Material> materials = new HashMap<>();
+    private final List<WarehouseObserver> observers = new ArrayList<>();
 
     public Warehouse(String id) {
         this.id = id;
@@ -27,11 +33,16 @@ public class Warehouse implements IWarehouse {
                     newMaterial.setQuantity(0);
                     return existingMaterial;
                 });
+
+        notifyObservers(OperationType.ADD, material, "Added " + material.getQuantity() + " of " + material.getName() + " to " + id);
     }
 
     @Override
     public void removeByName(String name) {
-        materials.remove(name);
+        Material removed = materials.remove(name);
+        if (removed != null) {
+            notifyObservers(OperationType.REMOVE, removed, "Removed material " + name + " from " + id);
+        }
     }
 
     @Override
@@ -60,6 +71,12 @@ public class Warehouse implements IWarehouse {
         if (material.getQuantity() == 0) {
             removeByName(material.getName());
         }
+
+        notifyObservers(
+                OperationType.TRANSFER,
+                transferredMaterial,
+                "Transferred " + transferredMaterial.getQuantity() + " of " + name + " from " + id + " to " + toWarehouse.getId()
+        );
     }
 
     @Override
@@ -100,6 +117,24 @@ public class Warehouse implements IWarehouse {
         System.out.println("Warehouse ID: " + id);
         for (Material material : materials.values()) {
             System.out.println(material);
+        }
+    }
+
+    @Override
+    public void addObserver(WarehouseObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(WarehouseObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(OperationType operation, Material material, String message) {
+        for (WarehouseObserver observer : observers) {
+            observer.update(operation, material, message);
+
         }
     }
 }

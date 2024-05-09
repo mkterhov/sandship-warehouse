@@ -1,6 +1,9 @@
 package sandship;
 
 import sandship.model.Material;
+import sandship.observer.WarehouseManager;
+import sandship.observer.WarehouseObserver;
+import sandship.observer.WarehouseSubject;
 import sandship.service.AddMaterialException;
 import sandship.service.IWarehouse;
 import sandship.service.TransferException;
@@ -14,6 +17,13 @@ public class Main {
         Material steel = new Material("Steel", "A strong metal", "steel_icon.png", 100);
         Material copper = new Material("Copper", "A conductive metal", "copper_icon.png", 50);
         Material wood = new Material("Wood", "Used for building", "wood_icon.png", 150);
+        WarehouseObserver manager1 = new WarehouseManager("Manager 1");
+        WarehouseObserver manager2 = new WarehouseManager("Manager 2");
+
+        ((WarehouseSubject) warehouse1).addObserver(manager1);
+        ((WarehouseSubject) warehouse1).addObserver(manager2);
+        ((WarehouseSubject) warehouse2).addObserver(manager1);
+
 
         try {
             steel.setQuantity(40);
