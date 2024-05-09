@@ -1,8 +1,7 @@
 package sandship.service;
 
 public class AddMaterialException extends Exception {
-    AddMaterialException(String message)
-    {
+    AddMaterialException(String message) {
         super(message);
     }
 }

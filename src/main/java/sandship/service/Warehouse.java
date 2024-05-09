@@ -19,15 +19,14 @@ public class Warehouse implements IWarehouse {
             throw new AddMaterialException("Failed to add material " + material.getName() + ". Exceeds max capacity.");
         }
 
-        if (materials.containsKey(material.getName())) {
-            Material existingMaterial = materials.get(material.getName());
-            existingMaterial.addQuantity(material.getQuantity());
-            material.removeQuantity(material.getQuantity());
-
-            return;
-        }
-
-        materials.put(material.getName(), material);
+        materials.merge(
+                material.getName(),
+                material,
+                (existingMaterial, newMaterial) -> {
+                    existingMaterial.addQuantity(newMaterial.getQuantity());
+                    newMaterial.setQuantity(0);
+                    return existingMaterial;
+                });
     }
 
     @Override
@@ -38,7 +37,7 @@ public class Warehouse implements IWarehouse {
     @Override
     public void transfer(String name, int quantity, IWarehouse toWarehouse) throws TransferException {
         if (!materials.containsKey(name)) {
-            throw new TransferException("The requested material not found in " + id  + "!");
+            throw new TransferException("The requested material not found in " + id + "!");
         }
 
         Material material = materials.get(name);
@@ -51,10 +50,9 @@ public class Warehouse implements IWarehouse {
 
         transferredMaterial.setQuantity(quantity);
 
-        try
-        {
+        try {
             toWarehouse.store(transferredMaterial);
-        } catch (AddMaterialException e){
+        } catch (AddMaterialException e) {
             throw new TransferException("Failed to transfer " + quantity + " of " + name + " from " + id + " to " + toWarehouse.getId());
         }
 
