@@ -6,11 +6,13 @@ import sandship.observer.WarehouseObserver;
 import sandship.observer.WarehouseSubject;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Warehouse implements IWarehouse, WarehouseSubject {
     private final String id;
-    private final Map<String, Material> materials = new HashMap<>();
-    private final List<WarehouseObserver> observers = new ArrayList<>();
+    private final Map<String, Material> materials = new ConcurrentHashMap<>();
+    private final List<WarehouseObserver> observers = new CopyOnWriteArrayList<>();
 
     public Warehouse(String id) {
         this.id = id;
@@ -22,6 +24,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
             throw new AddMaterialException("Failed to add material " + material.getName() + ". Exceeds max capacity.");
         }
 
+        int quantityToAdd = material.getQuantity();
         materials.merge(
                 material.getName(),
                 material,
@@ -31,7 +34,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
                     return existingMaterial;
                 });
 
-        notifyObservers(OperationType.ADD, material, "Added " + material.getQuantity() + " of " + material.getName() + " to " + id);
+        notifyObservers(OperationType.ADD, material, "Added " + quantityToAdd + " of " + material.getName() + " to " + id);
     }
 
     @Override
@@ -75,7 +78,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
         notifyObservers(
                 OperationType.TRANSFER,
                 transferredMaterial,
-                "Transferred " + transferredMaterial.getQuantity() + " of " + name + " from " + id + " to " + toWarehouse.getId()
+                "Transferred " + quantity + " of " + name + " from " + id + " to " + toWarehouse.getId()
         );
     }
 

@@ -12,8 +12,8 @@ public class WarehouseManager implements WarehouseObserver {
     @Override
     public void update(OperationType operation, Material material, String message) {
         System.out.printf(
-                "%s received notification (%s): %s - Material: %s, Quantity: %d, Max Capacity: %d%n",
-                name, operation, message, material.getName(), material.getQuantity(), material.getMaxCapacity()
+                "%s received notification (%s): %s\n",
+                name, operation, message
         );
     }
 }
