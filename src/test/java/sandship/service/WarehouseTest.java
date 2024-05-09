@@ -105,6 +105,15 @@ public class WarehouseTest {
     }
 
     @Test
+    public void testSameWarehouseTransferException() {
+        TransferException exception = assertThrows(TransferException.class, () -> {
+            warehouse1.transfer("Steel", 10, warehouse1);
+        });
+
+        assertEquals("Cannot transfer material Steel to the same warehouse W1", exception.getMessage());
+    }
+
+    @Test
     public void testGetId() {
         assertEquals("W1", warehouse1.getId());
     }
