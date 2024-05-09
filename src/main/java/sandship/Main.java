@@ -24,10 +24,10 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         //uncomment below to run single threaded test
-//        test();
+        test();
 
         //uncomment below to run concurrent test
-        testConcurrent();
+        //testConcurrent();
     }
 
     private static void test() {
@@ -115,8 +115,8 @@ public class Main {
         WarehouseObserver manager1 = new WarehouseManager("Manager 1");
         for (Warehouse warehouse : warehouses) {
             warehouse.addObserver(manager1);
-
         }
+
         // Create a CountDownLatch to synchronize thread completion
         CountDownLatch latch = new CountDownLatch(NUM_THREADS);
 

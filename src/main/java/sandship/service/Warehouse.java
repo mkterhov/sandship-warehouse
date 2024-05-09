@@ -54,6 +54,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
         if (toWarehouse.getId().equals(id)) {
             throw new TransferException("Cannot transfer material " + name + " to the same warehouse " + id);
         }
+
         Material material = materials.get(name);
         Material transferredMaterial = new Material.Builder(
                 material.getName(),

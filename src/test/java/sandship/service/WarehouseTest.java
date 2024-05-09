@@ -87,7 +87,7 @@ public class WarehouseTest {
     }
 
     @Test
-    public void testTransferMaterialThrowsTransferException() throws AddMaterialException {
+    public void testTransferMaterialThrowsTransferExceptionWhenTransferIntoTheSameWarehouse() throws AddMaterialException {
         Material material3 = new Material.Builder("Copper", "A conductive metal", "copper_icon.png", 100)
                 .quantity(100)
                 .build();
