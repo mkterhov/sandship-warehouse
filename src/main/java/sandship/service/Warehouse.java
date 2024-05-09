@@ -5,10 +5,7 @@ import sandship.observer.OperationType;
 import sandship.observer.WarehouseObserver;
 import sandship.observer.WarehouseSubject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Warehouse implements IWarehouse, WarehouseSubject {
     private final String id;
@@ -81,12 +78,8 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
 
     @Override
     public int getAvailableCapacity(Material material) {
-        if (materials.containsKey(material.getName())) {
-            Material existingMaterial = materials.get(material.getName());
-            return material.getMaxCapacity() - existingMaterial.getQuantity();
-        }
-
-        return material.getMaxCapacity();
+        Material existingMaterial = materials.get(material.getName());
+        return existingMaterial == null ? material.getMaxCapacity() : material.getMaxCapacity() - existingMaterial.getQuantity();
     }
 
     private boolean validateMaterialAddition(Material material) {
@@ -104,7 +97,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
 
     @Override
     public Map<String, Material> getMaterials() {
-        return materials;
+        return Map.copyOf(materials);
     }
 
     @Override
@@ -134,7 +127,6 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
     public void notifyObservers(OperationType operation, Material material, String message) {
         for (WarehouseObserver observer : observers) {
             observer.update(operation, material, message);
-
         }
     }
 }

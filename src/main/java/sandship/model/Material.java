@@ -59,12 +59,9 @@ public class Material {
 
     @Override
     public String toString() {
-        return "Material{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", icon='" + icon + '\'' +
-                ", quantity=" + quantity +
-                ", maxCapacity=" + maxCapacity +
-                '}';
+        return String.format(
+                "Material{name='%s', description='%s', icon='%s', maxCapacity=%d, quantity=%d}",
+                name, description, icon, maxCapacity, quantity
+        );
     }
 }
