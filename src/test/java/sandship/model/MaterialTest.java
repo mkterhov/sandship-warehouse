@@ -9,7 +9,8 @@ public class MaterialTest {
 
     @BeforeEach
     public void setUp() {
-        material = new Material("Wood", "Used for building stuff", "wood_icon.png", 100);
+        material = new Material.Builder("Wood", "Used for building stuff", "wood_icon.png", 100)
+                .build();
     }
 
     @Test

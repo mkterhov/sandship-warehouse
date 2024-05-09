@@ -52,14 +52,14 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
             throw new TransferException("Cannot transfer material " + name + " to the same warehouse " + id);
         }
         Material material = materials.get(name);
-        Material transferredMaterial = new Material(
+        Material transferredMaterial = new Material.Builder(
                 material.getName(),
                 material.getDescription(),
                 material.getIcon(),
                 material.getMaxCapacity()
-        );
-
-        transferredMaterial.setQuantity(quantity);
+        )
+                .quantity(quantity)
+                .build();
 
         try {
             toWarehouse.store(transferredMaterial);

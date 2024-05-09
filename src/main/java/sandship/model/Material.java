@@ -7,12 +7,36 @@ public class Material {
     private final int maxCapacity;
     private int quantity;
 
-    public Material(String name, String description, String icon, int maxCapacity) {
-        this.name = name;
-        this.description = description;
-        this.icon = icon;
-        this.quantity = 0;
-        this.maxCapacity = maxCapacity;
+    public Material(Builder builder) {
+        this.name = builder.name;
+        this.description = builder.description;
+        this.icon = builder.icon;
+        this.quantity = builder.quantity;
+        this.maxCapacity = builder.maxCapacity;
+    }
+
+    public static class Builder {
+        private final String name;
+        private final String description;
+        private final String icon;
+        private final int maxCapacity;
+        private int quantity = 0;
+
+        public Builder(String name, String description, String icon, int maxCapacity) {
+            this.name = name;
+            this.description = description;
+            this.icon = icon;
+            this.maxCapacity = maxCapacity;
+        }
+
+        public Builder quantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Material build() {
+            return new Material(this);
+        }
     }
 
     public String getName() {

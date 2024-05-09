@@ -14,9 +14,16 @@ public class Main {
         IWarehouse warehouse1 = new Warehouse("Warehouse 1");
         IWarehouse warehouse2 = new Warehouse("Warehouse 2");
 
-        Material steel = new Material("Steel", "A strong metal", "steel_icon.png", 100);
-        Material copper = new Material("Copper", "A conductive metal", "copper_icon.png", 50);
-        Material wood = new Material("Wood", "Used for building", "wood_icon.png", 150);
+        Material steel = new Material.Builder("Steel", "A strong metal", "steel_icon.png", 100)
+                .quantity(40)
+                .build();
+        Material copper = new Material.Builder("Copper", "A conductive metal", "copper_icon.png", 50)
+                .quantity(30)
+                .build();
+        Material wood = new Material.Builder("Wood", "Used for building", "wood_icon.png", 150)
+                .quantity(100)
+                .build();
+
         WarehouseObserver manager1 = new WarehouseManager("Manager 1");
         WarehouseObserver manager2 = new WarehouseManager("Manager 2");
 
@@ -41,8 +48,9 @@ public class Main {
         warehouse1.printMaterials();
 
         try {
-            Material iron = new Material("Iron", "A strong metal", "iron_icon.png", 200);
-            iron.setQuantity(80);
+            Material iron = new Material.Builder("Iron", "A strong metal", "iron_icon.png", 200)
+                    .quantity(80)
+                    .build();
             warehouse2.store(iron);
         } catch (AddMaterialException e) {
             System.err.println("Error adding material to Warehouse 2: " + e.getMessage());
