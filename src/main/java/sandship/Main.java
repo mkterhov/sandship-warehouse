@@ -24,7 +24,6 @@ public class Main {
         ((WarehouseSubject) warehouse1).addObserver(manager2);
         ((WarehouseSubject) warehouse2).addObserver(manager1);
 
-
         try {
             steel.setQuantity(40);
             warehouse1.store(steel);
@@ -62,7 +61,7 @@ public class Main {
 
         warehouse2.printMaterials();
 
-        warehouse2.removeByName("Iron");
+        warehouse2.remove("Iron");
 
         System.out.println("\nAfter removing Iron from Warehouse 2:");
         warehouse2.printMaterials();

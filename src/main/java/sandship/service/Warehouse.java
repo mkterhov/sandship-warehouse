@@ -35,7 +35,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
     }
 
     @Override
-    public void removeByName(String name) {
+    public void remove(String name) {
         Material removed = materials.remove(name);
         if (removed != null) {
             notifyObservers(OperationType.REMOVE, removed, "Removed material " + name + " from " + id);
@@ -69,7 +69,7 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
 
         material.removeQuantity(quantity);
         if (material.getQuantity() == 0) {
-            removeByName(material.getName());
+            remove(material.getName());
         }
 
         notifyObservers(
@@ -79,15 +79,14 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
         );
     }
 
-    @Override
-    public int getAvailableCapacity(Material material) {
+    private int calculateAvailableCapacity(Material material) {
         Material existingMaterial = materials.get(material.getName());
         return existingMaterial == null ? material.getMaxCapacity() : material.getMaxCapacity() - existingMaterial.getQuantity();
     }
 
     private boolean validateMaterialAddition(Material material) {
         if (materials.containsKey(material.getName())) {
-            return material.getQuantity() <= getAvailableCapacity(materials.get(material.getName()));
+            return material.getQuantity() <= calculateAvailableCapacity(materials.get(material.getName()));
         }
 
         return true;
@@ -101,11 +100,6 @@ public class Warehouse implements IWarehouse, WarehouseSubject {
     @Override
     public Map<String, Material> getMaterials() {
         return Map.copyOf(materials);
-    }
-
-    @Override
-    public void setMaterials(Map<String, Material> materials) {
-        this.materials = materials;
     }
 
     @Override

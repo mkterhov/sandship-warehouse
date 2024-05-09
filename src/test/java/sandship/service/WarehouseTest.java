@@ -51,11 +51,11 @@ public class WarehouseTest {
 
     @Test
     public void testRemoveByName() {
-        warehouse1.removeByName("Steel");
+        warehouse1.remove("Steel");
         assertEquals(1, warehouse1.getMaterials().size());
         assertFalse(warehouse1.getMaterials().containsKey("Steel"));
 
-        warehouse1.removeByName("Wood");
+        warehouse1.remove("Wood");
         assertEquals(0, warehouse1.getMaterials().size());
     }
 
@@ -79,9 +79,14 @@ public class WarehouseTest {
 
     @Test
     public void testTransferMaterialThrowsExceptionWhenRequestingTransferOfNonExisting() {
-        assertThrows(TransferException.class, () -> {
+        TransferException exception = assertThrows(TransferException.class, () -> {
             warehouse1.transfer("Copper", 200, warehouse2);
         });
+
+        assertEquals(
+                "The requested material not found in W1!",
+                exception.getMessage()
+        );
     }
 
     @Test
@@ -124,14 +129,5 @@ public class WarehouseTest {
         expectedMaterials.put("Steel", material1);
         expectedMaterials.put("Wood", material2);
         assertEquals(expectedMaterials, warehouse1.getMaterials());
-    }
-
-    @Test
-    public void testSetMaterials() {
-        Map<String, Material> newMaterials = new HashMap<>();
-        newMaterials.put("Copper", new Material("Copper", "A conductive metal", "copper_icon.png", 100));
-        warehouse1.setMaterials(newMaterials);
-        assertEquals(1, warehouse1.getMaterials().size());
-        assertTrue(warehouse1.getMaterials().containsKey("Copper"));
     }
 }
