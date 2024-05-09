@@ -23,7 +23,6 @@ public class Material {
         return description;
     }
 
-
     public String getIcon() {
         return icon;
     }
@@ -56,5 +55,16 @@ public class Material {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                ", quantity=" + quantity +
+                ", maxCapacity=" + maxCapacity +
+                '}';
     }
 }

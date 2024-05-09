@@ -101,7 +101,7 @@ public class Warehouse implements IWarehouse {
     public void printMaterials() {
         System.out.println("Warehouse ID: " + id);
         for (Material material : materials.values()) {
-            System.out.println("Material: " + material.getName() + ", Quantity: " + material.getQuantity() + ", Max Capacity: " + material.getMaxCapacity());
+            System.out.println(material);
         }
     }
 }
